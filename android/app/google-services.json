@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "868900990570",
+    "project_id": "dr-abdelhameed",
+    "storage_bucket": "dr-abdelhameed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868900990570:android:3bdf174c0bcca20e33a413",
+        "android_client_info": {
+          "package_name": "com.example.dr_abdelhameed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "868900990570-ovq90oeqsdeml9met2724un7emdgjkuc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxi_L3c3vCDOw-uTpYht4apkUhd7RjOVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "868900990570-ovq90oeqsdeml9met2724un7emdgjkuc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
