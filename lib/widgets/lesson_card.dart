@@ -23,7 +23,9 @@ class LessonCard extends StatelessWidget {
                   FirestoreMethods().deleteLesson(
                       collec: '${lesson.sybjectType}${lesson.classNumber}',
                       context: context,
-                      docss: lesson.lessonId);
+                      docss: lesson.lessonId,
+                      folderName: lesson.dataType,
+                      videoName: lesson.videoName);
                   Navigator.of(context).pop();
                 },
                 padding: const EdgeInsets.all(20),
@@ -73,7 +75,7 @@ class LessonCard extends StatelessWidget {
           ),
           InkWell(
               onTap: () async {
-                    FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+                FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
 
                 FirestoreMethods().addToWatchingList(
                     classNumber: lesson.classNumber,

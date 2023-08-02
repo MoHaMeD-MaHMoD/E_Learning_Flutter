@@ -91,6 +91,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                           return LessonCard(
                             lesson: Lesson(
                                 dataType: data['data_type'],
+                                videoName: data['videoName'],
                                 datePublished: DateTime.now(),
                                 classNumber: data['classNumber'],
                                 sybjectType: data['sybjectType'],
@@ -146,6 +147,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                           return LessonCard(
                             lesson: Lesson(
                                 dataType: data['data_type'],
+                                videoName: data['videoName'],
                                 datePublished: DateTime.now(),
                                 classNumber: data['classNumber'],
                                 sybjectType: data['sybjectType'],
@@ -203,6 +205,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                 datePublished: DateTime.now(),
                                 classNumber: data['classNumber'],
                                 sybjectType: data['sybjectType'],
+                                videoName: data['videoName'], 
                                 url: data['url'],
                                 lessonId: data['lessonId'],
                                 watchingList: data['watchingList'],

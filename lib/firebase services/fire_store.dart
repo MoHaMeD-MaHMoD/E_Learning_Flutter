@@ -1,10 +1,10 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dr_abdelhameed/constants/snackbar';
-import 'package:dr_abdelhameed/firebase%20services/storage.dart';
 import 'package:dr_abdelhameed/models/lesson.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 
 class FirestoreMethods {
@@ -12,8 +12,21 @@ class FirestoreMethods {
     required collec,
     required docss,
     required context,
+    required videoName,
+    required folderName,
   }) async {
-    await FirebaseFirestore.instance.collection(collec).doc(docss).delete();
+    try {
+      await FirebaseFirestore.instance.collection(collec).doc(docss).delete();
+      await FirebaseStorage.instance
+          .ref()
+          .child("$folderName/$videoName")
+          .delete()
+          .then((value) {
+        showSnackBar(context, "successfully deleted");
+      });
+    } catch (e) {
+      showSnackBar(context, "error ${e.toString()}");
+    }
   }
 
   addLesson(
@@ -24,16 +37,18 @@ class FirestoreMethods {
       required duration,
       required context,
       required videoPath,
+      required videoURL,
       required videoName,
       required folderName}) async {
     try {
-      String videoURL = await getVideoURL(
-          videoPath: videoPath, videoName: videoName, folderName: folderName);
+      // String videoURL = await getVideoURL(
+      //     videoPath: videoPath, videoName: videoName, folderName: folderName);
       CollectionReference lessons =
           FirebaseFirestore.instance.collection(sybjectType + classNumber);
       String newId = const Uuid().v1();
 
       Lesson lessonData = Lesson(
+        videoName: videoName,
         dataType: dataType,
         datePublished: DateTime.now(),
         name: description,

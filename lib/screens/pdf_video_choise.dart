@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 // ignore: must_be_immutable
 class PdfORVideoWidget extends StatelessWidget {
   String subjectTybe;
-  final String title;
-  PdfORVideoWidget({required this.title, required this.subjectTybe, super.key});
+  final String classNumber;
+  PdfORVideoWidget(
+      {required this.classNumber, required this.subjectTybe, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,32 +16,32 @@ class PdfORVideoWidget extends StatelessWidget {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IntrinsicHeight(
-                      child: Stack(
-                        children: [
-                          Align(
-                            child: Text(
-                              ' Materials',
-                              style: 
-                              Theme.of(context).textTheme.displayMedium?.copyWith(color: Colors.white)
-                            ),
-                          ),
-                          Positioned(
-                            left: 0,
-                            child: CustomIconButton(
-                              height: 35,
-                              width: 35,
-                              onTap: () => Navigator.pop(context),
-                              child: const Icon(Icons.arrow_back),
-                            ),
-                          ),
-                        ],
+                  child: Stack(
+                    children: [
+                      Align(
+                        child: Text(' Materials',
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMedium
+                                ?.copyWith(color: Colors.white)),
                       ),
-                    ),
+                      Positioned(
+                        left: 0,
+                        child: CustomIconButton(
+                          height: 35,
+                          width: 35,
+                          onTap: () => Navigator.pop(context),
+                          child: const Icon(Icons.arrow_back),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: SizedBox(
@@ -56,8 +57,9 @@ class PdfORVideoWidget extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DetailsScreen(dataType:'Video',
-                                      title: title,
+                                builder: (context) => DetailsScreen(
+                                      dataType: 'Video',
+                                      classNumber: classNumber,
                                       subjectTybe: subjectTybe,
                                     )));
                       },
@@ -87,9 +89,10 @@ class PdfORVideoWidget extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DetailsScreen(dataType:'PDF',
-                                      title: title,
+                                builder: (context) => DetailsScreen(
+                                      dataType: 'PDF',
                                       subjectTybe: subjectTybe,
+                                      classNumber: classNumber,
                                     )));
                       },
                       label: const Text(

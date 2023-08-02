@@ -7,6 +7,8 @@ class Lesson {
   String sybjectType;
   String classNumber;
   String dataType;
+  String videoName;
+
   int duration;
   List watchingList;
 
@@ -14,8 +16,8 @@ class Lesson {
   DateTime datePublished;
 
   Lesson({
-        required this.dataType,
-
+    required this.dataType,
+    required this.videoName,
     required this.datePublished,
     required this.classNumber,
     required this.sybjectType,
@@ -29,10 +31,10 @@ class Lesson {
 
   Map<String, dynamic> convertToMap() {
     return {
-      'data_type':dataType,
+      'data_type': dataType,
+      'videoName': videoName,
       'sybjectType': sybjectType,
       'wishlist': wishlist,
-
       'classNumber': classNumber,
       'duration': duration,
       'watchingList': watchingList,
@@ -49,8 +51,9 @@ class Lesson {
   static convertSnap2Model(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
     return Lesson(
-      dataType:snapshot['data_type'],
+      dataType: snapshot['data_type'],
       classNumber: snapshot["classNumber"],
+      videoName: snapshot["videoName"],
       sybjectType: snapshot["sybjectType"],
       name: snapshot["name"],
       lessonId: snapshot["lessonId"],

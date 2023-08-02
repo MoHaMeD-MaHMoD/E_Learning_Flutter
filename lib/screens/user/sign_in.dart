@@ -1,4 +1,3 @@
-
 import 'package:dr_abdelhameed/constants/color.dart';
 import 'package:dr_abdelhameed/constants/constants.dart';
 import 'package:dr_abdelhameed/firebase%20services/auth.dart';
@@ -65,18 +64,22 @@ class _LoginState extends State<Login> {
                   keyboardType: TextInputType.emailAddress,
                   obscureText: false,
                   decoration: decorationTextfield.copyWith(
-                      hintText: "Enter Your Email : ",
-                      suffixIcon: const Icon(Icons.email))),
+                      hintText: "Enter Your Email  ",
+                      suffixIcon: const Icon(
+                        Icons.email,
+                        color: kPrimaryColor,
+                      ))),
               const SizedBox(
-                height: 33,
+                height: 44,
               ),
               TextField(
                   controller: passwordController,
                   keyboardType: TextInputType.text,
                   obscureText: isVisable ? false : true,
                   decoration: decorationTextfield.copyWith(
-                      hintText: "Enter Your Password : ",
+                      hintText: "Enter Your Password  ",
                       suffixIcon: IconButton(
+                          color: kPrimaryColor,
                           onPressed: () {
                             setState(() {
                               isVisable = !isVisable;
@@ -91,46 +94,27 @@ class _LoginState extends State<Login> {
               ElevatedButton(
                 onPressed: () async {
                   await onLogInPressed();
-                 
                 },
                 style: ButtonStyle(
+
                   backgroundColor: MaterialStateProperty.all(kPrimaryColor),
                   padding: MaterialStateProperty.all(const EdgeInsets.all(12)),
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8))),
+                      borderRadius: BorderRadius.circular(16))),
                 ),
                 child: isLoading
                     ? const CircularProgressIndicator(
                         color: kPrimaryColor,
                       )
                     : const Text(
-                        "Sign in",
-                        style: TextStyle(fontSize: 19),
+                        'SIGN IN',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
               ),
-              // const SizedBox(
-              //   height: 9,
-              // ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     const Text("Do not have an account?",
-              //         style: TextStyle(fontSize: 18)),
-              //     TextButton(
-              //         onPressed: () {
-              //           Navigator.pushReplacement(
-              //             context,
-              //             MaterialPageRoute(
-              //                 builder: (context) =>  const Register()),
-              //           );
-              //         },
-              //         child: const Text('sign up',
-              //             style: TextStyle(
-              //                 color: kPrimaryColor,
-              //                 fontSize: 18,
-              //                 decoration: TextDecoration.underline))),
-              //   ],
-              // ),
             ]),
           ),
         )));

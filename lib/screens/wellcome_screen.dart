@@ -1,7 +1,8 @@
-
 import 'package:dr_abdelhameed/constants/color.dart';
+import 'package:dr_abdelhameed/provider/user_provider.dart';
 import 'package:dr_abdelhameed/screens/base_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -44,21 +45,21 @@ class WelcomeScreen extends StatelessWidget {
                         children: [
                           const Spacer(),
                           const Text(
-                            "دكتور عبدالحميد العجوزة",
+                            "Learning everything",
                             style: TextStyle(
                               fontSize: 28,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           const Spacer(),
                           const Text(
-                            "تعلم بسرور معنا \n ! أينما أنت",
+                            "Learn with pleasure with\nus,where you are!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black54,
                               wordSpacing: 2.5,
                               height: 1.5,
-                              fontSize: 24,
+                              fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -80,7 +81,8 @@ class WelcomeScreen extends StatelessWidget {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const BaseScreen()));
+                                          builder: (context) =>
+                                              const BaseScreen()));
                                 },
                                 child: const Text(
                                   "Get Started",

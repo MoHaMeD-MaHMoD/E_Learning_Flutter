@@ -14,12 +14,11 @@ class DetailsScreen extends StatefulWidget {
   String subjectTybe;
   String dataType;
 
-  String classNumber = "1";
-  final String title;
+  final String classNumber;
 
   DetailsScreen({
     super.key,
-    required this.title,
+    required this.classNumber,
     required this.dataType,
     required this.subjectTybe,
   });
@@ -32,23 +31,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   void initState() {
     super.initState();
-
-    switch (widget.title) {
-      case "First Class":
-        widget.classNumber = "1";
-        break;
-      case "Second Class":
-        widget.classNumber = "2";
-        break;
-      case "Third Class":
-        widget.classNumber = "3";
-        break;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final userDataFromDB = Provider.of<UserProvider>(context).getUser;
+
+    print("**********${widget.classNumber}");
+
+    print(userDataFromDB!.classtType);
+
+    print(widget.subjectTybe);
+    print(userDataFromDB!.subjectType);
+    print(widget.classNumber);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
@@ -65,7 +60,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     children: [
                       Align(
                         child: Text(
-                          '${widget.subjectTybe}  ${widget.title}',
+                          '${widget.subjectTybe}  ${widget.classNumber}',
                           style: Theme.of(context).textTheme.displayMedium,
                         ),
                       ),
@@ -93,11 +88,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                 ),
                 //--------------------------------------------
-
-                ((userDataFromDB!.classtType == widget.classNumber &&
-                            userDataFromDB.subjectType.contains(widget.subjectTybe) ) ||
-                        userDataFromDB.email == 'drabdelhamidalagoza@gmail.com')
-                    ? (widget.dataType == 'Video')
+                 (widget.dataType == 'Video')
                         ? StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection(
@@ -132,6 +123,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           classNumber: data['classNumber'],
                                           sybjectType: data['sybjectType'],
                                           url: data['url'],
+                                          videoName: data['videoName'],
                                           lessonId: data['lessonId'],
                                           watchingList: data['watchingList'],
                                           wishlist: data['wishlist'],
@@ -182,7 +174,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           watchingList: data['watchingList'],
                                           wishlist: data['wishlist'],
                                           duration: data['duration'],
-                                          name: data['name']),
+                                          name: data['name'],
+                                          videoName: data['videoName']),
                                       itemCount: snapshot.data!.docs.length,
                                     );
                                   }).toList(),
@@ -190,8 +183,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               );
                             },
                           )
-                    : const Center(
-                        child: Text("Access Desnied : You Are not Subscribe"))
+                    
 
                 //----------------------------------------------
               ],

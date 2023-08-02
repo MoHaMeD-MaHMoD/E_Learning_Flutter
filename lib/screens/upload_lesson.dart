@@ -1,5 +1,9 @@
 import 'dart:io';
+
+import 'package:dr_abdelhameed/constants/snackbar';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:math';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:path/path.dart' show basename;
 
@@ -18,13 +22,14 @@ class VideoSelector extends StatefulWidget {
 class _VideoSelectorState extends State<VideoSelector> {
   List<String> dataTypeItemsList = ['Video', 'PDF'];
   String? selecteddataTypeItemsList = 'Video';
-  List<String> subjectItemsList = ['Physics', 'Chemistry', 'biology'];
+  List<String> subjectItemsList = ['Physics', 'Chemistry', 'Biology'];
   String? selectedSubjectItemsList = 'Physics';
   List<String> classItemsList = ['1', '2', '3'];
   String? selectedClassItemsList = '1';
 
   final desController = TextEditingController();
   bool isLoading = false;
+  double percentage = 0;
   File? galleryFile;
   String? videoName;
   XFile? xfilePick;
@@ -58,8 +63,7 @@ class _VideoSelectorState extends State<VideoSelector> {
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(kpink)),
+                      backgroundColor: MaterialStateProperty.all(kpink)),
                   child: const Text('Select a Lesson'),
                   onPressed: () {
                     _showPicker(context: context);
@@ -78,8 +82,8 @@ class _VideoSelectorState extends State<VideoSelector> {
                         )),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 16),
                   child: TextField(
                     // controller: descriptionController,
                     maxLines: 1,
@@ -189,14 +193,17 @@ class _VideoSelectorState extends State<VideoSelector> {
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextButton(
                       onPressed: () async {
-                        setState(() {
-                          isLoading = true;
-                        });
+                        // setState(() {
+                        //   isLoading = true;
+                        // });
 
                         videoName = basename(galleryFile!.path);
                         int random = Random().nextInt(9999999);
                         videoName = "$random$videoName";
 
+                        String videoURLl = await getVideoURL();
+
+                        // ignore: use_build_context_synchronously
                         await FirestoreMethods().addLesson(
                             dataType: selecteddataTypeItemsList,
                             videoPath: galleryFile,
@@ -206,7 +213,8 @@ class _VideoSelectorState extends State<VideoSelector> {
                             folderName: selecteddataTypeItemsList,
                             classNumber: selectedClassItemsList,
                             sybjectType: selectedSubjectItemsList,
-                            duration: _currentValue);
+                            duration: _currentValue,
+                            videoURL: videoURLl);
 
                         setState(() {
                           desController.clear();
@@ -214,8 +222,17 @@ class _VideoSelectorState extends State<VideoSelector> {
                         });
                       },
                       child: isLoading
-                          ? const CircularProgressIndicator(
-                              color: kPrimaryColor,
+                          ? CircularPercentIndicator(
+                              radius: 100,
+                              lineWidth: 10,
+                              backgroundColor: kblue,
+                              percent: (percentage / 100),
+                              center: Text(
+                                percentage.toStringAsFixed(1),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              progressColor: kpink,
                             )
                           : const Text(
                               "Upload",
@@ -224,7 +241,10 @@ class _VideoSelectorState extends State<VideoSelector> {
                                   fontSize: 19,
                                   fontWeight: FontWeight.bold),
                             )),
-                )
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
               ],
             ),
           );
@@ -232,6 +252,54 @@ class _VideoSelectorState extends State<VideoSelector> {
       ),
     );
   }
+
+  Future<String> getVideoURL() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    // Upload image to firebase storage
+    final storageRef =
+        FirebaseStorage.instance.ref("$selecteddataTypeItemsList/$videoName");
+    // use this code if u are using flutter web
+    UploadTask uploadTask = storageRef.putFile(galleryFile!);
+
+    uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) async {
+      switch (taskSnapshot.state) {
+        case TaskState.running:
+          final progress =
+              100 * (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes);
+          setState(() {
+            percentage = progress.toDouble();
+          });
+          break;
+        case TaskState.paused:
+          showSnackBar(context, "upload is paused");
+          break;
+
+        case TaskState.canceled:
+          showSnackBar(context, "upload is canceled");
+          break;
+
+        case TaskState.error:
+          showSnackBar(context, "ERROR in Upload");
+          break;
+
+        case TaskState.success:
+          setState(() {
+            isLoading = true;
+          });
+          break;
+      }
+    });
+
+    TaskSnapshot snap = await uploadTask;
+    // Get img url
+    String urll = await snap.ref.getDownloadURL();
+
+    return urll;
+  }
+//------------------------------------------
 
   void _showPicker({
     required BuildContext context,
@@ -245,22 +313,21 @@ class _VideoSelectorState extends State<VideoSelector> {
               ListTile(
                 leading: const Icon(Icons.photo_library),
                 title: const Text('Gallery'),
-                onTap: () async{
-                    final pickedFile = await picker.pickMedia();
-                    xfilePick = pickedFile;
-                    setState(
-                      () {
-                        if (xfilePick != null) {
-                          galleryFile = File(pickedFile!.path);
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              // is this context <<<
-                              const SnackBar(
-                                  content: Text('Nothing is selected')));
-                        }
-                      },
-                    );
-                  
+                onTap: () async {
+                  final pickedFile = await picker.pickMedia();
+                  xfilePick = pickedFile;
+                  setState(
+                    () {
+                      if (xfilePick != null) {
+                        galleryFile = File(pickedFile!.path);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            // is this context <<<
+                            const SnackBar(
+                                content: Text('Nothing is selected')));
+                      }
+                    },
+                  );
 
                   // ignore: use_build_context_synchronously
                   Navigator.of(context).pop();
@@ -281,7 +348,7 @@ class _VideoSelectorState extends State<VideoSelector> {
     );
   }
 
- Future getVideo(
+  Future getVideo(
     ImageSource img,
   ) async {
     final pickedFile = await picker.pickVideo(

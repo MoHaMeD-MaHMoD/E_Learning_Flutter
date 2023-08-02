@@ -4,6 +4,7 @@ import 'package:dr_abdelhameed/constants/size.dart';
 import 'package:dr_abdelhameed/firebase%20services/auth.dart';
 import 'package:dr_abdelhameed/models/category.dart';
 import 'package:dr_abdelhameed/provider/user_provider.dart';
+import 'package:dr_abdelhameed/screens/course_screen.dart';
 import 'package:dr_abdelhameed/screens/pdf_video_choise.dart';
 import 'package:dr_abdelhameed/screens/user/sign_in.dart';
 import 'package:dr_abdelhameed/widgets/search_testfield.dart';
@@ -118,6 +119,7 @@ class _BodyState extends State<Body> {
 }
 
 class CategoryCard extends StatelessWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final title;
   final Category category;
   const CategoryCard({
@@ -128,16 +130,31 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("itle---------------$title");
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PdfORVideoWidget(
-            subjectTybe: category.name,
-            title: title,
-          ),
-        ),
-      ),
+      onTap: () {
+        if (FirebaseAuth.instance.currentUser!.email ==
+            'drabdelhamidalagoza@gmail.com') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CourseScreen(
+                subjectTybe: category.name,
+              ),
+            ),
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PdfORVideoWidget(
+                subjectTybe: category.name,
+                classNumber: title,
+              ),
+            ),
+          );
+        }
+      },
       child: Container(
         width: MediaQuery.of(context).size.width * .45,
         padding: const EdgeInsets.all(10),
